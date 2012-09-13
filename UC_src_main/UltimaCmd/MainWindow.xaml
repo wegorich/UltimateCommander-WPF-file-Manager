@@ -1,0 +1,114 @@
+﻿<Window x:Class="UltimaCmd.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        MinHeight="300" MinWidth="500" 
+        Background="#FFF1EDED"
+        Closing="WindowClosing" Icon="/UltimaCmd;component/Resources/YaST.ico" WindowStartupLocation="CenterScreen">
+    <Window.CommandBindings>
+        <CommandBinding Command="BrowseBack" 
+                    Executed="GoBackOnExecute" 
+                    CanExecute="GoBackCanExecute" />
+        <CommandBinding Command="BrowseForward" 
+                    Executed="GoAheadOnExecute" 
+                    CanExecute="GoAheadCanExecute" />
+    </Window.CommandBindings>
+        <DockPanel>
+        <Menu Name="topMenu" DockPanel.Dock="Top">
+            <MenuItem Header="_Конфигурация">
+                <MenuItem Header="_Настройка..." Click="MenuItemSettingsClick" />
+                <MenuItem Header="Панель _инструментов..." />
+                <MenuItem Header="_Редактировать файлы конфигурации" />
+                <MenuItem Header="Запо_мнить позицию" />
+                <MenuItem Header="Со_хранить настройки" />
+            </MenuItem>
+
+            <MenuItem Header="_Запуск">
+                <MenuItem Header="Изменить меню _Запуск..." />
+                <MenuItem Header="Изменить _Главное меню..." />
+            </MenuItem>
+
+            <MenuItem Header="Сп_равка">
+                <MenuItem Header="_Просмотр справки" Command="Help"/>
+                <MenuItem Header="_Горячие клавиши" Tag="1"  Click="HelpItemClick"/>
+                <Separator />
+                <MenuItem Header="Соо_бщить об ошибке" Click="HelpItemClick" />
+                <Separator />
+                <MenuItem Header="_Зарегистрировать продукт" Tag="2"  Click="HelpItemClick"/>
+                <MenuItem Header="Про_верить наличие обновлений" Tag="3"  Click="HelpItemClick"/>
+                <MenuItem Header="_Техническая поддержка" Click="HelpItemClick" />
+                <Separator />
+                <MenuItem Header="_О Ultimate Commander..." Tag="4" Click="HelpItemClick"/>
+            </MenuItem>
+        </Menu>
+
+        <ToolBarTray Background="Transparent" Name="toolBarPanel" DockPanel.Dock="Top" VerticalAlignment="Top"
+                                Orientation="Horizontal" AllowDrop="True" Drop="ToolBarPanelDrop" IsManipulationEnabled="False">
+            <ToolBar Name="toolBarMain" HorizontalAlignment="Left">
+                <ToggleButton Name="hiddenElem" 
+                                         MaxWidth="26"
+                                         Click="HiddenOnOffToolBar">
+                    <Image Source="pack://application:,,,/JoyOs.Media;component/img/Toolbar/HIDDEN.ico" MaxWidth="16" IsHitTestVisible="False" Stretch="None" MaxHeight="16" />
+                </ToggleButton>
+                <Separator Margin="3" />
+                <Button Name="dataToolBar" Tag="0" MaxWidth="26" Click="OpenPluginsClick">
+                    <Image Margin="3" Source="pack://application:,,,/JoyOs.Media;component/img/Base/UCBASE.ico"></Image>
+                </Button>
+                <Button Name="imageToolBar" Tag="1" MaxWidth="26" Click="OpenPluginsClick">
+                    <Image Margin="3" Source="pack://application:,,,/JoyOs.Media;component/img/Plugins/Photos/PHOTO.ico"></Image>
+                </Button>
+                <Button Name="videoToolBar" Tag="2" MaxWidth="26" Click="OpenPluginsClick">
+                    <Image Margin="3" Source="pack://application:,,,/JoyOs.Media;component/img/Plugins/Media/MEDIA.ico"></Image>
+                </Button>
+                <Separator Margin="3" />
+                <Button MaxWidth="26" Command="BrowseBack">
+                    <Image Margin="2" Source="pack://application:,,,/JoyOs.Media;component/img/Toolbar/PREVFRAME.ico"></Image>
+                </Button>
+                <Button MaxWidth="26" Command="BrowseForward">
+                    <Image Margin="2" Source="pack://application:,,,/JoyOs.Media;component/img/Toolbar/NEXTFRAME.ico"></Image>
+                </Button>
+                <Button Name="dataGridRefresh"  MaxWidth="26" Width="26" Height="26" Click="DataGridButtonsClick">
+                    <Image Margin="2" Source="pack://application:,,,/JoyOs.Media;component/img/Toolbar/REFRESH.png"></Image>
+                </Button>
+            </ToolBar>
+
+            <ToolBar Name="toolBarFastLink">
+                <Button Tag="Windows" MaxWidth="26" ToolTip="Папка Windows" Click="FastButtonClick">
+                    <Image MaxHeight="16" 
+                           Source="pack://application:,,,/JoyOs.Media;component/img/Toolbar/WINDOWS.ico"></Image>
+                </Button>
+                <Button Tag="System" MaxWidth="26" Click="FastButtonClick" ToolTip="System32">
+                    <Image MaxHeight="16" Source="pack://application:,,,/JoyOs.Media;component/img/Toolbar/SYSTEM32.ico"></Image>
+                </Button>
+                <Button Tag="Desktop" MaxWidth="26" Click="FastButtonClick" ToolTip="Рабочий стол">
+                    <Image MaxHeight="16" Source="pack://application:,,,/JoyOs.Media;component/img/Toolbar/DESKTOP.ico"></Image>
+                </Button>
+                <Button Tag="Recycler" MaxWidth="26" ToolTip="Корзина">
+                    <Image MaxHeight="16" 
+                           Source="pack://application:,,,/JoyOs.Media;component/img/Toolbar/RECYCLER.ico"></Image>
+                </Button>
+                <Button Tag="34" MaxWidth="26" Click="FastButtonClick" ToolTip="Папка Temp">
+                    <Image MaxHeight="16" 
+                           Source="pack://application:,,,/JoyOs.Media;component/img/Toolbar/TEMP.ico"></Image>
+                </Button>
+                <Button Tag="ProgramFiles" MaxWidth="26" Click="FastButtonClick" ToolTip="Папка Program Files">
+                    <Image MaxHeight="16" 
+                           Source="pack://application:,,,/JoyOs.Media;component/img/Toolbar/PROGRAMFILES.ico"></Image>
+                </Button>
+                <Button Tag="UserProfile" MaxWidth="26" Click="FastButtonClick" ToolTip="Папка пользователя">
+                    <Image MaxHeight="16" 
+                           Source="pack://application:,,,/JoyOs.Media;component/img/Toolbar/USER.ico"></Image>
+                </Button>
+                <Button Tag="MyDocuments" MaxWidth="26" Click="FastButtonClick" ToolTip="Мои документы">
+                    <Image MaxHeight="16" 
+                           Source="pack://application:,,,/JoyOs.Media;component/img/Toolbar/MYDOCUMENTS.ico"></Image>
+                </Button>
+                <Button Tag="LocalApplicationData" MaxWidth="26" Click="FastButtonClick" Loaded="ButtonLoaded" ToolTip="Папка Application Data">
+                    <Image MaxHeight="16" 
+                           Source="pack://application:,,,/JoyOs.Media;component/img/Toolbar/APPLICATIONDATA.ico"></Image>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>       
+
+        <Frame Name="mainFrame" Navigated="FrameMainNavigated" NavigationUIVisibility="Hidden"></Frame>
+    </DockPanel>
+</Window>

@@ -1,0 +1,10 @@
+﻿<Window x:Class="UcImageViewer.BigImageWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="BigImageWindow" ResizeMode="NoResize" WindowStyle="None" WindowState="Maximized" KeyUp="ScrollViewerKeyDown">
+
+    <ScrollViewer Name="ScrollViewer1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled" ScrollChanged="ScrollViewerScrollChanged" MouseMove="ScrollViewerMouseMove" KeyUp="ScrollViewerKeyDown">
+        <StackPanel Name="StackPanel1" Orientation="Horizontal" CanVerticallyScroll="False" MouseDown="StackPanelMouseDown" MouseUp="StackPanelMouseUp" Background="Black">
+        </StackPanel>
+    </ScrollViewer>
+</Window>

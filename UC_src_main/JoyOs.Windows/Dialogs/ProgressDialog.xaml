@@ -1,0 +1,51 @@
+﻿<Window x:Class="JoyOs.Windows.Dialogs.ProgressDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Processing..."
+        Width="350"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="SingleBorderWindow"
+        SizeToContent="Height" ResizeMode="CanMinimize">
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.874,1.197"
+                           StartPoint="0.126,-0.197">
+            <GradientStop Color="#CCCCCC"
+                      Offset="0" />
+            <GradientStop Color="Gray"
+                      Offset="1" />
+            <GradientStop Color="White"
+                      Offset="0.304" />
+        </LinearGradientBrush>
+    </Window.Background>
+        <StackPanel>
+            <TextBlock Margin="10,8,10,8"
+                 Text="A background operation is in progress. Please wait..."
+                 x:Name="txtDialogMessage"
+                 VerticalAlignment="Top"
+                 Height="Auto"
+                 Foreground="DarkSlateGray"
+                 FontSize="14"
+                 TextWrapping="Wrap" />
+
+            <ProgressBar Margin="8,0,12,8"
+                   x:Name="progressBar"
+                   Foreground="#FFFFA609"
+                   VerticalAlignment="Top"
+                   Height="25" />
+            <DockPanel Height="25"
+                 VerticalAlignment="Bottom"
+                 Margin="10,0,12,13">
+                <Button x:Name="btnCancel"
+                Click="BtnCancelClick"
+                Visibility="Collapsed"
+                Content="Cancel"
+                DockPanel.Dock="Right"
+                Width="80"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Right" />
+                <Label x:Name="lblStatus"
+               Foreground="DarkSlateGray"
+               Content="Work in progress. Please stand by..." />
+            </DockPanel>
+        </StackPanel>
+</Window>

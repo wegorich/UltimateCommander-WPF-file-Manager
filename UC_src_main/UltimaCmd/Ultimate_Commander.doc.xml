@@ -1,0 +1,198 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>UltimaCmd</name>
+    </assembly>
+    <members>
+        <member name="T:UltimaCmd.MainWindow">
+            <summary>
+            Interaction logic for MainWindow.xaml
+            </summary>
+            <summary>
+            Interaction logic for MainWindow.xaml
+            </summary>
+            <summary>
+            Interaction logic for FileManagerFiles.xaml
+            </summary>
+            <summary>
+            Interaction logic for MainWindow.xaml
+            </summary>
+            <summary>
+            Interaction logic for MainWindow.xaml
+            </summary>
+            <summary>
+            Interaction logic for MainWindow.xaml
+            </summary>
+            <summary>
+            Interaction logic for MainWindow.xaml
+            </summary>
+            <summary>
+            MainWindow
+            </summary>
+        </member>
+        <member name="M:UltimaCmd.MainWindow.GoBackCanExecute(System.Object,System.Windows.Input.CanExecuteRoutedEventArgs)">
+            <summary>
+            Переходим на предыдущую директорию
+            </summary>
+        </member>
+        <member name="M:UltimaCmd.MainWindow.GoAheadCanExecute(System.Object,System.Windows.Input.CanExecuteRoutedEventArgs)">
+            <summary>
+            Переходим на следующую директорию
+            </summary>
+        </member>
+        <member name="M:UltimaCmd.MainWindow.FileOpenToolBarClick(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Открывает файл при нажатии на кнопку на тулбаре
+            </summary>
+            <param name="sender">Button</param>
+            <param name="e">RoutedEventArgs</param>
+        </member>
+        <member name="M:UltimaCmd.MainWindow.HiddenOnOffToolBar(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Show new or hide old files in current foulder
+            </summary>
+            <param name="sender">object</param>
+            <param name="e">RoutedEventArgs</param>
+        </member>
+        <member name="M:UltimaCmd.MainWindow.AddToolBarButton(System.String)">
+            <summary>
+            Добавляем кнопки файлов перенесенных на тулбар
+            </summary>
+            <param name="fileName">string путь к файлу</param>
+        </member>
+        <member name="M:UltimaCmd.MainWindow.ToolBarPanelDrop(System.Object,System.Windows.DragEventArgs)">
+            <summary>
+            Обрабатывает DragAndDrop на ToolBarPanel и добавляет кнопки файлам на ToolBar
+            </summary>
+            <param name="sender">ToolBarPanel</param>
+            <param name="e">DragEventArgs</param>
+        </member>
+        <member name="M:UltimaCmd.MainWindow.DataGridButtonsClick(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Buttons which helps user navigate in DataGrid( Folder )
+            </summary>
+            <param name="sender">Button</param>
+            <param name="e">RoutedEventArgs</param>
+        </member>
+        <member name="M:UltimaCmd.MainWindow.WindowClosing(System.Object,System.ComponentModel.CancelEventArgs)">
+            <summary>
+            Закрытие формы удаляем все лишние потоки
+            </summary>
+            <param name="sender">Window</param>
+            <param name="e">CancelEventArgs</param>
+        </member>
+        <member name="F:UltimaCmd.MainWindow._toolFilesList">
+            <summary>
+            File`s tool box buttons
+            </summary>
+        </member>
+        <member name="M:UltimaCmd.MainWindow.#ctor">
+            <summary>
+            MainWindow`s constructor - start the Commander
+            </summary>
+        </member>
+        <member name="M:UltimaCmd.MainWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="P:UltimaCmd.MainWindow.UcCurrentDirectory">
+            <summary>
+            Default start Directory
+            </summary>
+        </member>
+        <member name="T:UltimaCmd.App">
+            <summary>
+            Interaction logic for App.xaml
+            </summary>
+            <summary>
+            App
+            </summary>
+        </member>
+        <member name="M:UltimaCmd.App.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="M:UltimaCmd.App.Main">
+            <summary>
+            Application Entry Point.
+            </summary>
+        </member>
+        <member name="T:UltimaCmd.Help.IHelpSystem">
+            <summary>
+            Поддержка работы со справочной системой
+            </summary>
+        </member>
+        <member name="M:UltimaCmd.Help.IHelpSystem.ShowGeneralHelpContent">
+            <summary>
+            Просто показать общий content
+            </summary>
+        </member>
+        <member name="M:UltimaCmd.Help.IHelpSystem.IsIndexFound(System.Int64)">
+            <summary>
+            Проверка есть ли заданный индекс
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:UltimaCmd.Help.IHelpSystem.IsPageFound(System.Int64)">
+            <summary>
+            Есть ли такая страница
+            </summary>
+            <param name="page"></param>
+            <returns></returns>
+        </member>
+        <member name="M:UltimaCmd.Help.IHelpSystem.ShowAboutBox">
+            <summary>
+            Диалог "О программе"
+            </summary>
+        </member>
+        <member name="P:UltimaCmd.Help.IHelpSystem.LookUpForHelpContent">
+            <summary>
+            Есть ли локальная справка
+            </summary>
+            <returns>
+            Boolean value 
+            True - есть
+            False - нет
+            </returns>
+        </member>
+        <member name="P:UltimaCmd.Help.IHelpSystem.IsInternetNeeded">
+            <summary>
+            Нужен ли выход в интернет ?
+            </summary>
+        </member>
+        <member name="T:UltimaCmd.Help.SessionFlags">
+            <summary>
+            Тип справочного соединения
+            </summary>
+        </member>
+        <member name="F:UltimaCmd.Help.SessionFlags.LocalHelpSession">
+            <summary>
+            Используем локальное хранилище справки
+            </summary>
+        </member>
+        <member name="F:UltimaCmd.Help.SessionFlags.InternetHelpSession">
+            <summary>
+            Выходим за справкой в Internet
+            </summary>
+        </member>
+        <member name="T:UltimaCmd.Properties.Resources">
+            <summary>
+              Класс ресурса со строгой типизацией для поиска локализованных строк и т.д.
+            </summary>
+        </member>
+        <member name="P:UltimaCmd.Properties.Resources.ResourceManager">
+            <summary>
+              Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
+            </summary>
+        </member>
+        <member name="P:UltimaCmd.Properties.Resources.Culture">
+            <summary>
+              Перезаписывает свойство CurrentUICulture текущего потока для всех
+              обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
+            </summary>
+        </member>
+    </members>
+</doc>

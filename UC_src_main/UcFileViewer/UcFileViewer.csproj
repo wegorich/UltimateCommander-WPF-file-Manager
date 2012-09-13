@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9E5DDC23-D2E5-4F52-BFA1-B5BA5D252A5B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UcFileViewer</RootNamespace>
+    <AssemblyName>UcFileViewer</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Events_Commands\Menus\Commands.cs" />
+    <Compile Include="Events_Commands\Menus\Files.cs" />
+    <Compile Include="Events_Commands\Menus\Networking.cs" />
+    <Compile Include="Events_Commands\Menus\Selection.cs" />
+    <Compile Include="Events_Commands\Menus\View.cs" />
+    <Compile Include="Events_Commands\PageAdditional.cs" />
+    <Compile Include="Events_Commands\StatusBar.cs" />
+    <Compile Include="Events_Commands\Watcher.cs" />
+    <Compile Include="FileManager.xaml.cs">
+      <DependentUpon>FileManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Functionality\FileManager.cs" />
+    <Compile Include="Implementation\Pluginable.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScanSystem.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="FileManager.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JoyOs.Windows\JoyOs.Windows.csproj">
+      <Project>{4C74C7D0-2FCD-4C4A-9CD4-A5335764571B}</Project>
+      <Name>JoyOs.Windows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JoyOs.Controls\JoyOs.Controls.csproj">
+      <Project>{C168F0D4-89B5-4A76-B80F-59D1E2CAA91F}</Project>
+      <Name>JoyOs.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JoyOs.FileSystem\JoyOs.FileSystem.csproj">
+      <Project>{0749FBBD-B4DC-4FCB-9DE6-37B9A85D897A}</Project>
+      <Name>JoyOs.FileSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JoyOs.BusinessLogic\JoyOs.BusinessLogic.csproj">
+      <Project>{1B2DA1BA-9F67-4DFC-93F1-2F53B68F1122}</Project>
+      <Name>JoyOs.BusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JoyOs.Media\JoyOs.Media.csproj">
+      <Project>{FB8AF90C-C87B-4D4A-932E-FD7C6E979110}</Project>
+      <Name>JoyOs.Media</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if exist "$(SolutionDir)..\Ultimate Commander\Plugins\wlx\$(TargetFileName)" (
+attrib -r "$(SolutionDir)..\Ultimate Commander\Plugins\wlx\$(TargetFileName)"
+erase /q "$(SolutionDir)..\Ultimate Commander\Plugins\wlx\$(TargetFileName)"
+)
+copy "$(TargetPath)" "$(SolutionDir)..\Ultimate Commander\Plugins\wlx\$(TargetFileName)"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

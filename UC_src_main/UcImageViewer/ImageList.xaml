@@ -1,0 +1,237 @@
+﻿<Page x:Class="UcImageViewer.ImageList"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="500"
+     MinHeight="300" MinWidth="500"
+	Title="ImageList" Loaded="PageLoaded">
+    <Page.CommandBindings>
+        <CommandBinding Command="Open" Executed="OpenOnExecute"/>
+        </Page.CommandBindings>
+        <DockPanel Name="mainDockPanel">
+        <!--меню для отображения на главной форме-->
+        <Menu DockPanel.Dock="Top" Visibility="Hidden" Name="mainMenu">
+            <MenuItem Header="Файлы">
+                <MenuItem Header="Открыть файл..." Command="Open" />
+                <Separator />
+                <MenuItem Header="Очистить представление" Command="Close" />
+                <Separator />
+                <MenuItem Header="Сохранить" Command="Save" />
+                <MenuItem Header="Сохранить как..." Command="SaveAs" />
+                <Separator />
+                <MenuItem Header="Последние файлы">
+                        <MenuItem Header="Коллекция" />
+                </MenuItem>
+                </MenuItem>
+            
+            <MenuItem Header="Изображение">
+                <MenuItem Header="Просмотр изображения" Click="ImageItemClick" Tag="maximazeBtn" />
+                <MenuItem Header="Следующее изображение" Command="BrowseForward" Click="ImageItemClick" Tag="forwardBtn" />
+                <MenuItem Header="Предыдущее изображение" Command="BrowseBack" Click="ImageItemClick" Tag="backBtn" />
+                <Separator />
+                <MenuItem Header="Слайд шоу" Click="ImageItemClick" Tag="playBtn" />
+            </MenuItem>
+            
+            <MenuItem Header="Редактирование">
+                <MenuItem Header="Черно-белое" Click="EditingItemClick" Tag="Grayscale" />
+                <MenuItem Header="Отобразить цвета" Click="EditingItemClick" Tag="Inversion" />
+                <Separator />
+                <MenuItem Header="Повернуть на 180*" Click="EditingItemClick" Tag="Rotate180" />
+                <MenuItem Header="Повернуть на 90* по часовой" Click="EditingItemClick" Tag="Rotate90" />
+                <MenuItem Header="Повернуть на 90* против часовой" Click="EditingItemClick" Tag="Rotate-90" />
+                <MenuItem Header="Отразить по горизонтали" Click="EditingItemClick" Tag="FlipHorizontal" />
+                <MenuItem Header="Отразить по вертикали" Click="EditingItemClick" Tag="FlipVertical" />
+            </MenuItem>            
+            <!-- TODO: снть коллапсед-->
+            <MenuItem Header="Настройки">
+                <MenuItem Header="Список" 
+                          IsCheckable="True" IsChecked="True" 
+                          Checked="ToolsItemCheck" Unchecked="ToolsItemCheck" Tag="List" />
+                <MenuItem Header="Изображение" IsCheckable="True"
+                          IsChecked="True" Checked="ToolsItemCheck" Unchecked="ToolsItemCheck"  Tag="Image" />
+                <MenuItem Header="Редактирование" IsCheckable="True" 
+                          IsChecked="True" Checked="ToolsItemCheck" Unchecked="ToolsItemCheck"  Tag="TabPanel" />
+                <MenuItem Header="Панель кнопок" IsCheckable="True" IsChecked="True"
+                          Checked="ToolsItemCheck" Unchecked="ToolsItemCheck"  Tag="StatusBar" />
+            </MenuItem>
+        </Menu>
+        
+        <StatusBar Name="statusBar" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+            <Button Name="backBtn" MaxHeight="26" 
+                    MinHeight="26" MinWidth="50" Click="OnStatusButtonsClick" ToolTip="Предыдущее изображение">
+                <Image Source="pack://application:,,,/JoyOs.Media;component/img/Plugins/Photos/backward.png" />
+            </Button>
+            <Button Name="playBtn" MaxHeight="26" 
+                    MinHeight="26" MinWidth="50" Click="OnStatusButtonsClick" ToolTip="Автопроигрывание">
+                <Image Name="playStopImg" Source="pack://application:,,,/JoyOs.Media;component/img/Plugins/Photos/play.png" />
+            </Button>
+            <Button Name="forwardBtn" MaxHeight="26" MinHeight="26" MinWidth="50" Click="OnStatusButtonsClick" ToolTip="Следующее изображение">
+                <Image Source="pack://application:,,,/JoyOs.Media;component/img/Plugins/Photos/forward.png" />
+            </Button>
+            <Button Name="maximazeBtn" MaxHeight="26" MinHeight="26" MinWidth="50" Click="OnStatusButtonsClick" ToolTip="На весь экран">
+                <Image Source="pack://application:,,,/JoyOs.Media;component/img/Plugins/Photos/paste.png"/>
+            </Button>
+            <Button  Name="save" MaxHeight="26" MinHeight="26" MinWidth="50" BorderThickness="1" Command="Save"
+                     Click="ImageStatusBarButtonClick" ToolTip="Сохранить">
+                <Image Source="pack://application:,,,/JoyOs.Media;component/img/Plugins/Photos/save.png"></Image>
+            </Button>
+
+        </StatusBar>
+
+
+        <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Name="listDef" MinWidth="100" Width="20*" />
+                <ColumnDefinition Name="splitDef" Width="auto"/>
+                <ColumnDefinition Name="imgDef" MinWidth="100" Width="80*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <DockPanel Name="imgGrid" Grid.Column="2">
+                <!-- большая картинка -->
+                <Label Name="imageDescription" DockPanel.Dock="Top" Margin="0,3,0,3" FontFamily="Verdana" FontSize="9" FontWeight="Bold" Foreground="#FF9A9A9A" Content="нет изображения" HorizontalAlignment="Center"></Label>
+                <!-- Менюшка -->
+                <TabControl Name="tabControl" DockPanel.Dock="Bottom" SelectionChanged="TabControlSelectionChanged">
+                        <TabItem Header="Повороты"  IsSelected="True">
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <Button Margin="5,2,0,2"  Name="rotateMinus" MaxHeight="26" MinHeight="26" MinWidth="26" BorderThickness="1" Click="ImageStatusBarButtonClick" VerticalAlignment="Center" ToolTip="Поворот на 90*">
+                                <Image Margin="3"  Source="pack://application:,,,/JoyOs.Media;component/img/Plugins/Photos/rotate_ccw.png"></Image>
+                            </Button>
+                            <Button Margin="5,2,0,2" Name="rotatePlus" MaxHeight="26" MinHeight="26" MinWidth="26" BorderThickness="1" Click="ImageStatusBarButtonClick" VerticalAlignment="Center" ToolTip="Поворот на -90*">
+                                <Image Margin="3" Source="pack://application:,,,/JoyOs.Media;component/img/Plugins/Photos/rotate_cw.png"></Image>
+                                </Button>
+                                
+                            <Button Margin="5,2,0,2" Name="flipHor" MaxHeight="26" MinHeight="26" MinWidth="26" BorderThickness="1" Click="ImageStatusBarButtonClick" VerticalAlignment="Center" ToolTip="Отразить по горизонтали">
+                                <Image Margin="3" Source="pack://application:,,,/JoyOs.Media;component/img/Plugins/Photos/flipHorizontal.png"></Image>
+                            </Button>
+                            <Button Margin="5,2,0,2" Name="flipVert" MaxHeight="26" MinHeight="26" MinWidth="26" BorderThickness="1" Click="ImageStatusBarButtonClick" VerticalAlignment="Center" ToolTip="Отразить по вертикали">
+                                <Image Margin="3" Source="pack://application:,,,/JoyOs.Media;component/img/Plugins/Photos/flipVertical.png"></Image>
+                            </Button>
+                            <Label Margin="5,0,0,0" VerticalContentAlignment="Center" VerticalAlignment="Center">угол:</Label>
+                                <Slider Name="angleSlider" Width="100" Margin="5,0,0,0" Minimum="0" Maximum="360" VerticalAlignment="Center" ValueChanged="AngleSliderValueChanged" />
+                                <TextBox Name="angleTextBox" Margin="5,0,0,0" Width="45" Height="22" 
+                                     TextChanged="AngleTextBoxTextChanged" MaxLength="3" TextAlignment="Center" 
+                                     IsReadOnly="False" VerticalAlignment="Center"></TextBox>
+                                <Label Margin="2,0,5,0" VerticalContentAlignment="Center" VerticalAlignment="Center">°</Label>
+
+                            </StackPanel>
+                        </TabItem>
+                        <TabItem Header="Цвет">
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Margin="5" Orientation="Vertical" VerticalAlignment="Center">
+                                    <Button Margin="0,2,0,2" Name="makeGray" MaxHeight="26" MinHeight="26" MinWidth="26"
+                                        BorderThickness="1" Click="ImageStatusBarButtonClick" ToolTip="Черно-белое">
+                                    <Image Margin="3"  Source="pack://application:,,,/JoyOs.Media;component/img/Plugins/Photos/fill.png"></Image>
+                                    </Button>
+                                    <Button Margin="0,2,0,2" Name="makeBlackWhite" MaxHeight="26" MinHeight="26" MinWidth="26" BorderThickness="1" 
+                                        Click="ImageStatusBarButtonClick" ToolTip="Инверсия">
+                                    <Image Margin="3"  Source="pack://application:,,,/JoyOs.Media;component/img/Plugins/Photos/fillBlack.png"></Image>
+                                    </Button>
+                                </StackPanel>
+                                <StackPanel Width="60" Height="60" Orientation="Vertical" VerticalAlignment="Center">
+                                    <Rectangle Name="colorRect" Fill="Black" Width="60" Height="60" StrokeThickness="2">
+                                        <Rectangle.Stroke>
+                                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                <GradientStop Color="Black" Offset="0" />
+                                                <GradientStop Color="White" Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Rectangle.Stroke>
+                                    </Rectangle>
+                                </StackPanel>
+                                <StackPanel>
+                                    <StackPanel Margin="3,5,3,0" Orientation="Horizontal">
+                                        <Label VerticalAlignment="Center">R:</Label>
+                                        <Slider Name="redColorSlider" VerticalAlignment="Center" 
+                                            Margin="5,0,5,0"   Width="100" Maximum="255" 
+                                            ValueChanged="ColorSliderValueChanged" />
+                                        <TextBox Name="redColorText" Height="20"  Width="35" MaxLength="3" TextAlignment="Center" FontSize="10" FontWeight="Bold"></TextBox>
+                                    </StackPanel>
+                                    <StackPanel Margin="3,5,3,0" Orientation="Horizontal">
+                                        <Label VerticalAlignment="Center">G:</Label>
+                                        <Slider Name="greenColorSlider" VerticalAlignment="Center" 
+                                            Margin="4,0,5,0"   Width="100" Maximum="255" 
+                                            ValueChanged="ColorSliderValueChanged"/>
+                                        <TextBox Name="greenColorText" Height="20"  Width="35" MaxLength="3" TextAlignment="Center" FontSize="10" FontWeight="Bold"></TextBox>
+                                    </StackPanel>
+                                    <StackPanel Margin="3,5,3,5" Orientation="Horizontal">
+                                        <Label VerticalAlignment="Center">B:</Label>
+                                        <Slider Name="blueColorSlider" VerticalAlignment="Center" 
+                                            Margin="5,0,5,0"   Width="100" Maximum="255"
+                                            ValueChanged="ColorSliderValueChanged"/>
+                                        <TextBox Name="blueColorText" Height="20"  Width="35" MaxLength="3" TextAlignment="Center" FontSize="10" FontWeight="Bold"></TextBox>
+                                    </StackPanel>
+                                </StackPanel>
+                                <UniformGrid  VerticalAlignment="Center" Rows="0" Columns="1">
+                                    <TextBlock Text="Яркость" />
+                                <StackPanel Orientation="Horizontal">
+                                    <Slider Name="britnessColorSlider" Margin="0,0,5,0" VerticalAlignment="Center" Maximum="255" Minimum="-255" Width="100" ValueChanged="BValValueChanged" />
+                                    <TextBox Name="brigtnessColorText" Height="20"  Width="35" MaxLength="3" TextAlignment="Center" FontSize="10" FontWeight="Bold">
+                                    </TextBox>
+
+                                </StackPanel>    
+                                    <TextBlock Text="Контрастность"/>
+                                    <StackPanel   Orientation="Horizontal" VerticalAlignment="Stretch">
+                                    <Slider Name="contrastColorSlider" Maximum="1" Margin="0,0,5,0" VerticalAlignment="Center" Minimum="0" Width="100" ValueChanged="CValValueChanged" />
+                                <TextBox Name="contrastColorText" Height="20"  Width="35" MaxLength="3" TextAlignment="Center" FontSize="10" FontWeight="Bold"></TextBox>
+</StackPanel>
+                            </UniformGrid>
+                            </StackPanel>
+                        </TabItem>
+                        <TabItem Header="Прочее">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Margin="5,5,5,5" HorizontalAlignment="Center" Orientation="Horizontal">
+                                    <Label VerticalAlignment="Center">Скручивание:</Label>
+                                    <Slider Name="twistedSlider" VerticalAlignment="Center" 
+                                            Margin="4,0,5,0"   Width="100" Minimum="-200"
+                                                                                                      Maximum="200"
+                                            ValueChanged="TwistedSliderValueChanged"/>
+                                    <TextBox Name="twistedText" Height="20"  
+                                         Width="35" MaxLength="3" TextAlignment="Center" 
+                                         FontSize="10" FontWeight="Bold" TextChanged="TwistedTextTextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </TabItem>
+                        <TabItem Header="Увеличение">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Margin="5,5,5,5" HorizontalAlignment="Center" Orientation="Horizontal">
+                                    <Label VerticalAlignment="Center">Увеличение:</Label>
+                                    <Slider Name="zoomSlider" VerticalAlignment="Center" 
+                                            Margin="4,0,5,0"   Width="100" Minimum="0"
+                                                                                                      Maximum="400"
+                                                                                                     ValueChanged="ZoomSliderValueChanged" IsSnapToTickEnabled="False" IsEnabled="True" />
+                                <!--ValueChanged="ZoomSliderValueChanged"-->
+                                <TextBox Name="zoomText" Height="20"  Width="35" 
+                                         MaxLength="3" TextAlignment="Center"
+                                         FontSize="10" FontWeight="Bold" TextChanged="ZoomTextTextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </TabItem>
+                    </TabControl>
+                <ScrollViewer Name="viewImg" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
+                    <Image  Name="bigImage"
+                   Source="/JoyOs.Media;component/img/Plugins/Photos/PHOTO.ico"
+                        PreviewMouseLeftButtonUp="ImageMouseLeftButtonUp" 
+                        PreviewMouseLeftButtonDown="ImageMouseLeftButtonDown" 
+                        PreviewMouseMove="ImageMouseMove" Stretch="Uniform"></Image>
+                </ScrollViewer>
+
+            </DockPanel>
+
+            <!-- разделитель-->
+
+            <GridSplitter Name="gridSplit" Width="3" Grid.Column="1" HorizontalAlignment="Center" ShowsPreview="True" />
+
+            <!-- прокрутка -->
+
+            <ScrollViewer Name="imgList" Focusable="False" Grid.Column="0">
+                <WrapPanel Name="imgWrapList" SizeChanged="ImageListWrapPanelSizeChanged"></WrapPanel>
+            </ScrollViewer>
+        </Grid>
+    </DockPanel>
+
+</Page>

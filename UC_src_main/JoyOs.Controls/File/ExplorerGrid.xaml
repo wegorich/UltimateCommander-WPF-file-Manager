@@ -1,0 +1,157 @@
+﻿<UserControl x:Class="JoyOs.Controls.File.ExplorerGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:my="clr-namespace:JoyOs.Controls.File"
+             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="250">
+    <UserControl.Resources>
+        <Style x:Key="Name_Column_Text"
+            TargetType="{x:Type TextBlock}">
+            <Setter Property="Padding" Value="5,2"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+        </Style>
+        <Style x:Key="Column_Text"
+            TargetType="{x:Type TextBlock}"
+            BasedOn="{StaticResource Name_Column_Text}">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+       
+    </UserControl.Resources>
+    <DockPanel>
+        <my:DriveTab DockPanel.Dock="Top" x:Name="driveTab" 
+                     DriveSelected="DriveTabDriveSelected" />
+        <my:PathComboBox x:Name="pathBox" DockPanel.Dock="Top" 
+                         FontWeight="ExtraBold" FontStretch="UltraExpanded" 
+                         PathChanged="PathBoxPathChanged" />
+        <my:DirectoryStatus x:Name="directoryStatus" 
+                            DockPanel.Dock="Bottom" />
+        <DataGrid Name="dataGrid"
+                        
+                          ItemsSource="{Binding}" DockPanel.Dock="Top" HeadersVisibility="Column" 
+                          CanUserAddRows="false"
+                          HorizontalScrollBarVisibility="Disabled" 
+                          VerticalScrollBarVisibility="Auto" 
+                          Drop="DataGridDrop" 
+                          Sorting="DataGridSorting" 
+                          
+                          GridLinesVisibility="None" 
+                          CanUserResizeRows="False" 
+                          AutoGenerateColumns="False" 
+                          AllowDrop="True" AlternationCount="2" MinRowHeight="2" 
+                          IsSynchronizedWithCurrentItem="True" 
+                          RowDetailsVisibilityMode="Collapsed" BorderBrush="{x:Null}" 
+                          Background="White"
+                          RowHeight="20"
+                          x:FieldModifier="private"
+                          PreviewMouseRightButtonUp="DataGridPreviewMouseRightButtonUp" 
+                          PreviewMouseLeftButtonUp="DataGridMouseUp" 
+                          PreviewMouseDoubleClick="DataGridMouseDoubleClick" 
+                          SelectionChanged="DataGridSelectionChanged">
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="FontWeight" Value="Black"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="HeaderStyle">
+                        <Setter.Value>
+                            <Style TargetType="DataGridRowHeader">
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Setter Property="Width" Value="0"/>
+                            </Style>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="SnapsToDevicePixels" Value="true"/>
+                    <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
+                    <Setter Property="ValidationErrorTemplate">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <TextBlock Foreground="Red" Margin="2,0,0,0" Text="!" VerticalAlignment="Center"/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="#FFEFF3EF"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="Khaki"/>
+                            <Setter Property="Grid.ZIndex" Value="9999"/>
+                            <Setter Property="RenderTransformOrigin" Value="0,0.5"/>
+                            <Setter Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="1.10" ScaleY="1.10"></ScaleTransform>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="DetailsVisibility" Value="Visible">
+                            <Setter Property="BorderThickness" Value="4,1,4,4"/>
+                            <Setter Property="BorderBrush" Value="#FF3886B9"/>
+                       </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+
+                <DataGridTemplateColumn SortMemberPath="Name" 
+                                                Header="Имя" Width="*"  IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock VerticalAlignment="Center" Padding="18,0,0,0" Text="{Binding Path=Name}">
+                                        <TextBlock.Background>
+                                            <ImageBrush AlignmentX="Left" Stretch="Uniform" ImageSource="{Binding Path=Icon}" TileMode="None" />
+                                        </TextBlock.Background>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="16" Source="{Binding Path=Icon}"></Image>
+                                <TextBox VerticalAlignment="Center" Padding="2,0,5,0" Text="{Binding Path=Name, Mode=TwoWay}" BorderBrush="{x:Null}" 
+                                         Background="White" 
+                                         TextChanged="TextBoxTextChanged" 
+                                         Unloaded="TextBoxUnloaded">
+                                </TextBox>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn SortMemberPath="Type" Header="Тип" Width="60" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource Column_Text}" HorizontalAlignment="Left" Text= "{Binding Path=Type}"></TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn SortMemberPath="Length" Header="Размер" Width="60" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource Column_Text}" Text= "{Binding Path=LengthToString, StringFormat={}{0}}"></TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn  SortMemberPath="Date" Header="Дата" Width="100" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource Column_Text}" Text= "{Binding Path=Info.LastAccessTime, ConverterCulture=en-GB, StringFormat={}{0:MM.dd.yyyy HH:mm }}"></TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

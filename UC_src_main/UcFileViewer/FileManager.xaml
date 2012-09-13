@@ -1,0 +1,189 @@
+﻿<Page xmlns:my="clr-namespace:JoyOs.Controls.File;assembly=JoyOs.Controls"  x:Class="UcFileViewer.FileManager"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="500"
+      
+      Unloaded="PageUnloaded" Loaded="PageLoaded">
+    <Page.Resources>
+        <Style x:Key="Bottomn_Button"
+            TargetType="{x:Type Button}">
+            <Setter Property="MinHeight" Value="26"/>
+            <Setter Property="MinWidth" Value="90"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="DimGray"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="Transparent"></Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Background" Value="WhiteSmoke"/>
+                    <Setter Property="BorderBrush" Value="DimGray"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter Property="Background" Value="DimGray"/>
+                    <Setter Property="BorderBrush" Value="Black"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+    <Page.CommandBindings>
+        <CommandBinding Command="Copy" 
+                    Executed="CopyOnExecute" 
+                    CanExecute="CopyCanExecute" />
+        <CommandBinding Command="Delete" 
+                    Executed="DeleteOnExecute" 
+                    CanExecute="DeleteCanExecute" />
+    </Page.CommandBindings>
+
+    <DockPanel Name="mainDockPanel" x:FieldModifier="private" Background="#FFF1EDED">
+        <Menu DockPanel.Dock="Top" Name="mainMenu" Visibility="Hidden" x:FieldModifier="private">
+            <MenuItem Header="_Файлы">
+                <MenuItem Header="_Изменить атрибуты..." Tag="Attributes" Click="FilesAdditionalClick" />
+                <MenuItem Header="_Упаковать..." Tag="Pack" Click="FilesArchiveOptionsClick"/>
+                <MenuItem Header="_Распаковать..." Tag="Unpack" Click="FilesArchiveOptionsClick"/>
+                <MenuItem Header="Протестировать _архив(ы)" Tag="Test" Click="FilesArchiveOptionsClick"/>
+                <MenuItem Header="Сравнить _по содержимому..." />
+                <MenuItem Header="_Открыть с помощью..." Tag="OpenWith" Click="FilesAdditionalClick" />
+                <MenuItem Header="В_нутренние ассоциации (только в UC)..." />
+                <MenuItem Header="Показать диалог сво_йств" Tag="Attributes" Click="FilesAdditionalClick"/>
+                <MenuItem Header="Подсчитать занимаемое _место" Tag="Place" Click="FilesAdditionalClick" />
+                <MenuItem Header="_Групповое переименование..." />
+                <MenuItem Header="_Комментарии к файлу..." />
+                <MenuItem Header="Пе_чать">
+                    <MenuItem Header="Коллекция" />
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Разби_ть файл..." Tag="Divide" Click="FilesArchiveOptionsClick"/>
+                <MenuItem Header="Со_брать файлы..." Tag="Add" Click="FilesArchiveOptionsClick"/>
+                <MenuItem Header="Кодироват_ь (MIME, UUE, XXE)..." Tag="Code" Click="FilesCryptoOptionsClick"/>
+                <MenuItem Header="_Декодировать (MIME, UUE, XXE, BinHex)..." Tag="Decode" Click="FilesCryptoOptionsClick"/>
+                <MenuItem Header="По_считать CRC-суммы (CRC32, MD5, SHA1)..." Tag="CRC_get" Click="FilesCryptoOptionsClick"/>
+                <MenuItem Header="Про_верить CRC-суммы (CRC32, MD5, SHA1)" Tag="CRC_check" Click="FilesCryptoOptionsClick"/>
+                <Separator />
+                <MenuItem Header="В_ыход" />
+            </MenuItem>
+            <MenuItem Header="_Выделение">
+                <MenuItem Header="Выде_лить группу..." Tag="True" Click="MenuItemSelectGroupClick" />
+                <MenuItem Header="Снять выделение _группы..." Tag="False" Click="MenuItemSelectGroupClick" />
+                <MenuItem Header="Вы_делить все" Tag="SelectAll" Click="MenuItemSelectEntriesClick" />
+                <MenuItem Header="Сн_ять все выделение" Tag="UnSelectAll" Click="MenuItemSelectEntriesClick" />
+                <MenuItem Header="_Инвертировать выделение" Tag="Inverse"  Click="MenuItemSelectEntriesClick" />
+                <MenuItem Header="Выделить файлы/папки по _расширению" Tag="SelectByExtension" Click="MenuItemSelectEntriesClick" />
+                <Separator />
+                <MenuItem Header="С_охранить выделение" Tag="SaveInternal" Click="MenuItemSelectEntriesClick" />
+                <MenuItem Header="Восс_тановить выделение" Tag="RestoreInternal" Click="MenuItemSelectEntriesClick" />
+                <MenuItem Header="Со_хранить выделение в файл..." Tag="SaveToFile" Click="MenuItemSelectEntriesClick" />
+                <MenuItem Header="Загрузить выделение из _файла..." Tag="RestoreFromFile" Click="MenuItemSelectEntriesClick" />
+                <Separator />
+                <MenuItem Header="Копировать имена файлов в _буфер" Tag="FileSystemEntriesNamesInternal" Click="MenuItemSelectCopyClick" />
+                <MenuItem Header="Копировать полн_ые имена файлов" Tag="FileSystemEntriesNamesFullPaths" Click="MenuItemSelectCopyClick" />
+                <MenuItem Header="Копировать _содержимое всех колонок" Tag="AllColumnsInternal" Click="MenuItemSelectCopyClick" />
+                <MenuItem Header="Копировать _все колонки (полные пути)" Tag="AllColumnsFullPaths" Click="MenuItemSelectCopyClick" />
+                <Separator />
+                <MenuItem Header="Сравнить _каталоги" Tag="CompareAll" Click="MenuItemSelectCompareClick" />
+                <MenuItem Header="Сравнить, скрыв одинаковые файлы " Tag="CompareWithoutSimilarFiles" Click="MenuItemSelectCompareClick" />
+            </MenuItem>
+            <MenuItem Header="К_оманды">
+                <MenuItem Header="_Дерево каталогов..." />
+                <MenuItem Header="_Поиск файлов..." Tag="search" Click="CommandItemClick" />
+                <MenuItem Header="_Метка диска..." />
+                <MenuItem Header="_Информация о системе" />
+                <MenuItem Header="_Синхронизировать каталоги..." />
+                <MenuItem Header="Из_бранные каталоги" />
+                <MenuItem Header="_Назад" />
+                <Separator />
+                <MenuItem Header="Открыть командную _консоль" />
+                <Separator />
+                <MenuItem Header="Показать все фа_йлы без подкаталогов" />
+                <MenuItem Header="Открыть папку _Рабочий стол" />
+                <MenuItem Header="Диспетчер _фоновой пересылки..." />
+                <Separator />
+                <MenuItem Header="Поменять местами панели (ак_тивные вкладки)" />
+                <MenuItem Header="Получатель _= Источнику" />
+            </MenuItem>
+            <MenuItem Header="_Сеть">
+                <MenuItem Header="Под_ключить сетевой диск..." />
+                <MenuItem Header="_Отключить сетевой диск..." />
+                <MenuItem Header="Сдел_ать каталог общим..." />
+                <MenuItem Header="_Закрыть общий доступ к каталогу..." />
+                <MenuItem Header="Показать ресурсы а_дминистратора" />
+                <Separator />
+                <MenuItem Header="_Соединиться с FTP-сервером..." />
+                <MenuItem Header="_Новое FTP-соединение..." />
+                <MenuItem Header="_Разорвать FTP-соединение..." IsEnabled="False" />
+                <MenuItem Header="Показывать скрытые _файлы на сервере" />
+                <MenuItem Header="Загрузка _по списку..." />
+                <MenuItem Header="_Установить соединение через LPT/USB-порт..." />
+            </MenuItem>
+            <MenuItem Header="Ви_д">
+                <MenuItem Header="_Краткий" />
+                <MenuItem Header="_Подробный" />
+                <MenuItem Header="Коммента_рии" />
+                <MenuItem Header="По_льзовательский набор колонок" />
+                <MenuItem Header="_Дерево каталогов" />
+                <MenuItem Header="Дерево в отдельной панели" />
+                <MenuItem Header="Просмотр _эскизов" />
+                <MenuItem Header="_Быстрый просмотр" />
+                <MenuItem Header="П_анели одна над другой" />
+                <MenuItem Header="_Новая вкладка для текущей папки" />
+                <Separator />
+                <MenuItem Header="Вс_е файлы" />
+                <MenuItem Header="Програ_ммы" />
+                <MenuItem Header="*.*" />
+                <MenuItem Header="_Фильтр..." />
+                <MenuItem Header="Только выделенные файл_ы" />
+                <Separator />
+                <MenuItem Header="По _имени" Tag="0" Click="MenuItemViewClick" />
+                <MenuItem Header="По _типу" Tag="1" Click="MenuItemViewClick" />
+                <MenuItem Header="По дате/_времени" Tag="2" Click="MenuItemViewClick" />
+                <MenuItem Header="По ра_змеру" Tag="3" Click="MenuItemViewClick" />
+                <MenuItem Header="Без _сортировки" Tag="4" Click="MenuItemViewClick" />
+                <Separator />
+                <MenuItem Header="В _обратном порядке" />
+                <Separator />
+                <MenuItem Header="Обновить содер_жимое панели" Command="Refresh" />
+            </MenuItem>
+        </Menu>
+
+        <Grid DockPanel.Dock="Bottom" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="25*"/>
+                    <ColumnDefinition Width="25*"/>
+                    <ColumnDefinition Width="25*"/>
+                    <ColumnDefinition Width="25*"/>
+            </Grid.ColumnDefinitions>
+            <Button Style="{StaticResource Bottomn_Button}" Click="CreateDirectoryButtonClick">Каталог</Button>
+            <Button Style="{StaticResource Bottomn_Button}" Name="copyBtn" Grid.Column="1"  Command="Copy">Копирование</Button>
+            <Button Style="{StaticResource Bottomn_Button}" Grid.Column="2" Click="MoveButtonClick">Перемещение</Button>
+            <Button Style="{StaticResource Bottomn_Button}" Name="deleteBtn" Grid.Column="3" Command="Delete">Удаление</Button>
+            </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="100" Width="50*" />
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition MinWidth="100" Width="50*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <GridSplitter Width="3"
+                      Grid.Column="1" HorizontalAlignment="Center"
+                      ShowsPreview="True" />
+            <my:ExplorerGrid Name="expLeft" Grid.Column="0" 
+                             SetFocusedExplorer="ExplorerGridSetFocusedExplorer" 
+                             NeedsUpdateSource="ExplorerGridNeedsUpdateSource"/>
+            <my:ExplorerGrid Name="expRight" Grid.Column="2" 
+                             SetFocusedExplorer="ExplorerGridSetFocusedExplorer" 
+                             NeedsUpdateSource="ExplorerGridNeedsUpdateSource" />
+        </Grid>
+        
+    </DockPanel>
+</Page>

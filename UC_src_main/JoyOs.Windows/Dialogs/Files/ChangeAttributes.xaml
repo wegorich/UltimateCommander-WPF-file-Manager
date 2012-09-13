@@ -1,0 +1,36 @@
+﻿<Window x:Class="JoyOs.Windows.Dialogs.Files.ChangeAttributes"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Окно уведомлений" 
+        WindowStyle="ToolWindow" 
+        WindowStartupLocation="CenterOwner" 
+        ResizeMode="NoResize" SizeToContent="Height" Width="370">
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.874,1.197"
+                           StartPoint="0.126,-0.197">
+            <GradientStop Color="#CCCCCC"
+                      Offset="0" />
+            <GradientStop Color="Gray"
+                      Offset="1" />
+            <GradientStop Color="White"
+                      Offset="0.304" />
+        </LinearGradientBrush>
+    </Window.Background>
+        <StackPanel Margin="10">
+        <GroupBox Foreground="DarkSlateGray" FontSize="14" Header="Изменение атрибутов" >
+            <UniformGrid Rows="4">
+                <CheckBox Name="archive" Content="Архивный" Tag="a"/>
+                <CheckBox Name="readOnly" Content="Только для чтения" Tag="r"/>
+                <CheckBox Name="hidden" Content="Скрытый" Tag="h"/>
+                <CheckBox Name="system" Content="Системный" Tag="s"/>
+            </UniformGrid>
+        </GroupBox>
+        <CheckBox Name="folderFile" Margin="6" Foreground="DarkSlateGray" FontSize="14" Content="Обрабатывать содержимое подкаталогов"/>
+            <StackPanel  HorizontalAlignment="Center"  Orientation="Horizontal">
+                <Button Name="okButton" Content="Ок" Margin="0,0,10,0" Width="100" 
+                    Height="26" HorizontalAlignment="Center" Click="OkButtonClick" />
+                <Button Name="cancelButton" Content="Отмена" IsDefault="True" IsCancel="True" 
+                    Width="100" Height="26" HorizontalAlignment="Center" />
+            </StackPanel>
+        </StackPanel>
+</Window>
